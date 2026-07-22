@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Doc AI Agent</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Doc AI Agent</h1>
+      <p class="subtitle">Upload a PDF or TXT document, then ask questions about it.</p>
+
+      <section id="upload-section">
+        <form id="upload-form">
+          <input type="file" id="file-input" name="file" accept=".pdf,.txt" required />
+          <button type="submit">Upload</button>
+        </form>
+        <p id="upload-status"></p>
+      </section>
+
+      <section id="chat-section">
+        <div id="messages"></div>
+        <form id="ask-form">
+          <input
+            type="text"
+            id="question-input"
+            placeholder="Ask a question about the uploaded document..."
+            disabled
+            required
+          />
+          <button type="submit" id="ask-button" disabled>Send</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+fastapi==0.115.9
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+chromadb==1.0.0
+pypdf==5.1.0
+httpx==0.28.1
+pydantic-settings==2.7.1
+
+# dev/test
+pytest==8.3.4
+pytest-mock==3.14.0

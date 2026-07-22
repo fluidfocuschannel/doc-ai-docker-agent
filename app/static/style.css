@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #1a1a1a;
+}
+
+.subtitle {
+  color: #555;
+  margin-top: -0.5rem;
+}
+
+#upload-section {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+#upload-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#upload-status {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+#messages {
+  height: 320px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.message {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  max-width: 85%;
+  white-space: pre-wrap;
+}
+
+.message-user {
+  align-self: flex-end;
+  background: #d6e6ff;
+}
+
+.message-assistant {
+  align-self: flex-start;
+  background: #eee;
+}
+
+#ask-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#question-input {
+  flex: 1;
+  padding: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
