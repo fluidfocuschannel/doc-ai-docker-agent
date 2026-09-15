@@ -33,6 +33,20 @@ body {
   color: #333;
 }
 
+#document-status {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+#clear-button {
+  margin-top: 0.5rem;
+  background: #fff;
+  border: 1px solid #c33;
+  color: #c33;
+  border-radius: 6px;
+}
+
 #messages {
   height: 320px;
   overflow-y: auto;

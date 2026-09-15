@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     OLLAMA_BASE_URL: str = "http://ollama:11434"
-    OLLAMA_CHAT_MODEL: str = "llama3.1"
+    OLLAMA_CHAT_MODEL: str = "qwen2.5:0.5b"
     OLLAMA_EMBED_MODEL: str = "nomic-embed-text"
 
     CHROMA_HOST: str = "chromadb"

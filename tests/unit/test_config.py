@@ -23,7 +23,7 @@ def test_defaults_when_env_not_set(monkeypatch):
     settings = config.Settings()
 
     assert settings.OLLAMA_BASE_URL == "http://ollama:11434"
-    assert settings.OLLAMA_CHAT_MODEL == "llama3.1"
+    assert settings.OLLAMA_CHAT_MODEL == "qwen2.5:0.5b"
     assert settings.OLLAMA_EMBED_MODEL == "nomic-embed-text"
     assert settings.CHROMA_HOST == "chromadb"
     assert settings.CHROMA_PORT == 8000

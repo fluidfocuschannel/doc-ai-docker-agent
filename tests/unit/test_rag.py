@@ -49,6 +49,33 @@ def test_store_chunks_sets_expected_ids_and_metadata(memory_client, mocker):
     assert {"filename": "doc.txt", "chunk_index": 1} in stored["metadatas"]
 
 
+def test_get_document_status_when_empty(memory_client):
+    rag.reset_collection(client=memory_client)
+
+    status = rag.get_document_status(client=memory_client)
+
+    assert status == {"filename": None, "chunk_count": 0}
+
+
+def test_get_document_status_after_store(memory_client, mocker):
+    mocker.patch("app.rag.embed_text", side_effect=lambda text: [len(text), 0.0])
+
+    rag.store_chunks(["chunk one", "chunk two"], source="doc.txt", client=memory_client)
+    status = rag.get_document_status(client=memory_client)
+
+    assert status == {"filename": "doc.txt", "chunk_count": 2}
+
+
+def test_clear_document_empties_collection(memory_client, mocker):
+    mocker.patch("app.rag.embed_text", side_effect=lambda text: [len(text), 0.0])
+    rag.store_chunks(["chunk one"], source="doc.txt", client=memory_client)
+
+    rag.clear_document(client=memory_client)
+
+    assert rag.has_document(client=memory_client) is False
+    assert rag.get_document_status(client=memory_client) == {"filename": None, "chunk_count": 0}
+
+
 def test_retrieve_returns_top_k_ordered_by_similarity(memory_client, mocker):
     def fake_embed(text):
         if "cat" in text:

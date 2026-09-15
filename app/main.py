@@ -65,6 +65,25 @@ async def upload(file: UploadFile = File(...)):
     return {"status": "ok", "filename": file.filename, "chunks_stored": len(chunks)}
 
 
+@app.get("/document")
+def document_status():
+    try:
+        return rag.get_document_status()
+    except Exception:
+        logger.exception("Failed to get document status")
+        raise HTTPException(status_code=502, detail="Vector store unreachable.")
+
+
+@app.delete("/document")
+def delete_document():
+    try:
+        rag.clear_document()
+    except Exception:
+        logger.exception("Failed to clear document")
+        raise HTTPException(status_code=502, detail="Vector store unreachable.")
+    return {"status": "ok"}
+
+
 @app.post("/ask")
 def ask(request: AskRequest):
     question = request.question.strip()

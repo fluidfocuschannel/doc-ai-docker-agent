@@ -1,6 +1,8 @@
 const uploadForm = document.getElementById("upload-form");
 const fileInput = document.getElementById("file-input");
 const uploadStatus = document.getElementById("upload-status");
+const documentStatus = document.getElementById("document-status");
+const clearButton = document.getElementById("clear-button");
 
 const askForm = document.getElementById("ask-form");
 const questionInput = document.getElementById("question-input");
@@ -19,6 +21,53 @@ function setChatEnabled(enabled) {
   questionInput.disabled = !enabled;
   askButton.disabled = !enabled;
 }
+
+function renderDocumentStatus(filename, chunkCount) {
+  if (!filename) {
+    documentStatus.textContent = "No document loaded.";
+    clearButton.hidden = true;
+    setChatEnabled(false);
+    return;
+  }
+
+  documentStatus.textContent = `Current document: "${filename}" (${chunkCount} chunks).`;
+  clearButton.hidden = false;
+  setChatEnabled(true);
+}
+
+async function refreshDocumentStatus() {
+  try {
+    const response = await fetch("/document");
+    if (!response.ok) return;
+    const body = await response.json();
+    renderDocumentStatus(body.filename, body.chunk_count);
+  } catch (err) {
+    documentStatus.textContent = "Error: could not reach the server.";
+  }
+}
+
+clearButton.addEventListener("click", async () => {
+  clearButton.disabled = true;
+  try {
+    const response = await fetch("/document", { method: "DELETE" });
+    if (!response.ok) {
+      const body = await response.json();
+      uploadStatus.textContent = `Error: ${body.detail || "could not clear document"}`;
+      return;
+    }
+
+    uploadStatus.textContent = "";
+    messages.innerHTML = "";
+    uploadForm.reset();
+    renderDocumentStatus(null, 0);
+  } catch (err) {
+    uploadStatus.textContent = "Error: could not reach the server.";
+  } finally {
+    clearButton.disabled = false;
+  }
+});
+
+refreshDocumentStatus();
 
 uploadForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -43,7 +92,7 @@ uploadForm.addEventListener("submit", async (event) => {
 
     uploadStatus.textContent = `Uploaded "${body.filename}" (${body.chunks_stored} chunks). You can now ask questions.`;
     messages.innerHTML = "";
-    setChatEnabled(true);
+    renderDocumentStatus(body.filename, body.chunks_stored);
   } catch (err) {
     uploadStatus.textContent = "Error: could not reach the server.";
   }

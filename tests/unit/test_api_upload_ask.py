@@ -108,3 +108,46 @@ def test_ask_returns_502_when_dependency_unreachable(client, mocker):
     response = client.post("/ask", json={"question": "What is the refund window?"})
 
     assert response.status_code == 502
+
+
+def test_get_document_status_when_none_uploaded(client, mocker):
+    mocker.patch("app.rag.get_document_status", return_value={"filename": None, "chunk_count": 0})
+
+    response = client.get("/document")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["filename"] is None
+    assert body["chunk_count"] == 0
+
+
+def test_get_document_status_when_uploaded(client, mocker):
+    mocker.patch(
+        "app.rag.get_document_status",
+        return_value={"filename": "sample.txt", "chunk_count": 3},
+    )
+
+    response = client.get("/document")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["filename"] == "sample.txt"
+    assert body["chunk_count"] == 3
+
+
+def test_delete_document_clears_current_document(client, mocker):
+    mock_clear = mocker.patch("app.rag.clear_document")
+
+    response = client.delete("/document")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+    mock_clear.assert_called_once()
+
+
+def test_delete_document_returns_502_when_dependency_unreachable(client, mocker):
+    mocker.patch("app.rag.clear_document", side_effect=ConnectionError("boom"))
+
+    response = client.delete("/document")
+
+    assert response.status_code == 502

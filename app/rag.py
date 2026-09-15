@@ -86,6 +86,21 @@ def has_document(client=None) -> bool:
     return get_collection(client).count() > 0
 
 
+def get_document_status(client=None) -> dict:
+    collection = get_collection(client)
+    count = collection.count()
+    if count == 0:
+        return {"filename": None, "chunk_count": 0}
+
+    stored = collection.get(limit=1)
+    filename = stored["metadatas"][0]["filename"]
+    return {"filename": filename, "chunk_count": count}
+
+
+def clear_document(client=None):
+    return reset_collection(client)
+
+
 def retrieve(question: str, top_k: int, client=None) -> list[RetrievedChunk]:
     collection = get_collection(client)
     query_embedding = embed_text(question)
